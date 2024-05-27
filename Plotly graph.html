@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Maestra.ai - User Journey Funnel</title>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+        }
+    </style>
+</head>
+<body>
+    <div id="funnel-chart"></div>
+
+    <script>
+        // Define the data for the funnel chart
+        var data = [
+            ["First Visit", 124892],
+            ["Subtitle Trial", 1527],
+            ["Voiceover Trial", 326],
+            ["Transcription Trial", 945],
+            ["Stripe First Payment", 313]
+        ];
+
+        // Extract the labels and values from the data
+        var labels = data.map(function(row) {
+            return row[0];
+        });
+        var values = data.map(function(row) {
+            return row[1];
+        });
+
+        // Calculate the percentage of users who proceed to each stage
+        var percentages = [100];
+        for (var i = 1; i < values.length; i++) {
+            percentages.push((values[i] / values[0]) * 100);
+        }
+
+        // Define the color set
+        var colors = ["#2dca8c", "#ffbe3d", "#008aff", "#2dca8c", "#ffbe3d"];
+
+        // Create the funnel chart
+        var trace = {
+            y: labels,
+            x: values,
+            textposition: "inside",
+            textinfo: "value+percent initial",
+            opacity: 0.8,
+            marker: { color: colors },
+            connector: { line: { color: "black", dash: "dot", width: 2 } },
+            hoverinfo: "text",
+            hovertext: labels.map(function(label, index) {
+                return label + ": " + values[index] + " (" + percentages[index].toFixed(2) + "%)";
+            }),
+            type: "funnel"
+        };
+
+        var data = [trace];
+
+        // Define the layout
+        var layout = {
+            title: {
+                text: "Maestra.ai - User Journey Funnel",
+                font: { size: 24 }
+            },
+            yaxis: { title: "Stage" },
+            xaxis: { title: "Number of Users" },
+            annotations: [{
+                text: "Start Date: May 20, 2024<br>End Date: May 26, 2024",
+                showarrow: false,
+                xref: "paper",
+                yref: "paper",
+                x: 0.5,
+                y: -0.15,
+                font: { size: 14 }
+            }]
+        };
+
+        // Create the plot
+        Plotly.newPlot("funnel-chart", data, layout);
+    </script>
+</body>
+</html>
